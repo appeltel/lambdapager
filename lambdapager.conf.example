@@ -1,0 +1,15 @@
+[pager]
+onduty = +12025550195, +12025550135
+interval = 3600
+
+[twilio]
+sid = 123ABC
+token = 456DEF
+number = +12025550113
+
+[test-example]
+url = https://localhost:8000/
+method = GET
+status_codes = 200,202
+response_contains = Hello, World
+

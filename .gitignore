@@ -63,3 +63,6 @@ target/
 
 #Virtualenv
 venv/
+
+#Avoid uploading creds
+lambdapager.conf
