@@ -14,11 +14,11 @@ class LambdaPager(object):
     _LambdaPager_
 
     """
-    def __init__(self, config=None):
+    def __init__(self, config=None, configfile='lambdapager.conf'):
         """
         Set up config
         """
-        self.get_config(config_dict=config)
+        self.get_config(config_dict=config, filename=configfile)
 
     def get_config(self, filename='lambdapager.conf', config_dict=None):
         """
