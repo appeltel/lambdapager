@@ -14,22 +14,22 @@ class LambdaPager(object):
     _LambdaPager_
 
     """
-    def __init__(self):
+    def __init__(self, config=None):
         """
         Set up config
         """
-        self.get_config()
+        self.get_config(config_dict=config)
 
-    def get_config(self, filename='lambdapager.conf'):
+    def get_config(self, filename='lambdapager.conf', config_dict=None):
         """
         Generate a configuration an ini file and return
-        it as a dict of section dicts
-
-        TODO: Find the least hacky way to alternatively
-        load the config from a generated python module
-        if uploaded to AWS - probably create a config module
-        that just has a single var that is the dict.
+        it as a dict of section dicts. Alternatively copy in
+        a config from an existing dict if given.
         """
+        if config_dict is not None:
+            self.config = config_dict
+            return
+
         conf = ConfigParser()
         conf.read(filename)
         self.config =  {sec:dict(conf.items(sec)) for sec in conf.sections()}

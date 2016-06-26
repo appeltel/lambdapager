@@ -3,5 +3,9 @@ Lambdapager cli entrypoint
 """
 from lambdapager import LambdaPager
 
-lp = LambdaPager()
-lp.run()
+def main():
+    lp = LambdaPager()
+    lp.run()
+
+if __name__ == '__main__':
+    main()
