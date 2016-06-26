@@ -37,7 +37,7 @@ tiny flask app that the lambdapager POSTs to that puts a heartbeat record
 in a redis (or other) database, and another cron-like/timer function that
 pages you if it hasn't gotten a heartbeat recently.
 
-## Snarky FAQ
+### Snarky FAQ
 
 **How do I acknowledge a page?**
 
