@@ -14,24 +14,16 @@ class LambdaPager(object):
     _LambdaPager_
 
     """
-    def __init__(self, config=None, configfile='lambdapager.conf'):
+    def __init__(self, configfile='lambdapager.conf', config_dict=None):
         """
         Set up config
-        """
-        self.get_config(config_dict=config, filename=configfile)
-
-    def get_config(self, filename='lambdapager.conf', config_dict=None):
-        """
-        Generate a configuration an ini file and return
-        it as a dict of section dicts. Alternatively copy in
-        a config from an existing dict if given.
         """
         if config_dict is not None:
             self.config = config_dict
             return
 
         conf = ConfigParser()
-        conf.read(filename)
+        conf.read(configfile)
         self.config =  {sec:dict(conf.items(sec)) for sec in conf.sections()}
 
     def check_site(self, settings):
