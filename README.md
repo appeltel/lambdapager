@@ -1,5 +1,10 @@
 # lambdapager
+
 The stateless pager.
+
+Copyright Eric Appelt, 2016, All Rights Reserved
+
+[![Travs-CI status](https://travis-ci.org/appeltel/lambdapager.png)](https://travis-ci.org/appeltel/lambdapager)
 
 ### Introduction / FAQ
 
