@@ -104,7 +104,7 @@ class PagerTests(unittest.TestCase):
         
         lp = LambdaPager(configfile='data/basic.conf')
         lp.run()
-        print(self.mock_requests.mock_calls)
+
         self.mock_requests.assert_any_call(
             'GET',
             'https://www.basic.com/'

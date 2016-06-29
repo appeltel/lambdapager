@@ -91,7 +91,7 @@ class LambdaPager(object):
         """
         tests = [
             self.config[sec] for sec in self.config.keys() 
-                             if sec.startswith('test-')
+                             if sec.startswith('site-')
         ]
         for test in tests:
             self.check_site(test)
