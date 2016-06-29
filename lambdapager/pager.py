@@ -3,6 +3,7 @@ pager module
 
 LambdaPager class and any required helper functions
 """
+import shlex
 from ConfigParser import ConfigParser
 
 import requests
@@ -36,6 +37,13 @@ class LambdaPager(object):
 
         status_string = settings.get('status_codes', '200,201,202')
         status_codes = [int(code) for code in status_string.split(',')]
+        response_reqs_raw = settings.get('response_contains', None)
+        if response_reqs_raw is not None:
+            splitter = shlex.shlex(response_reqs_raw, posix=True)
+            splitter.whitespace = ','
+            response_reqs = [item for item in splitter if item.strip()]
+        else:
+            response_reqs = []
 
         error = None
 
@@ -50,6 +58,12 @@ class LambdaPager(object):
                     'Error: {0} to {1} resulted in status code {2}' 
                     .format(method, url, resp.status_code)
                 )
+            for req in response_reqs:
+                if req not in resp.text:
+                    error = (
+                        'Error: {0} to {1} is missing the string: {2}' 
+                        .format(method, url, req)
+                    )
 
         if error is not None:
             self.page(error)

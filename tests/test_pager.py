@@ -129,7 +129,7 @@ class PagerTests(unittest.TestCase):
         
         lp = LambdaPager(configfile='data/basic.conf')
         lp.run()
-        print(self.mock_requests.mock_calls)
+
         self.mock_requests.assert_any_call(
             'GET',
             'https://www.basic.com/'
@@ -146,5 +146,77 @@ class PagerTests(unittest.TestCase):
         self.mock_client.messages.create.assert_any_call(
             body=mock.ANY,
             to='+12025550002',
+            from_='+12025559999'
+        )
+
+    def test_pager_text_config_success(self):
+        """
+        Test that the 'text' test scenario checks the configured sites
+        and does not page when all sites succeed and return the required
+        text strings "cat dog" and "bird2"
+        """
+        self.mock_requests.urls['https://www.text.com/'] = {
+            'methods': ['GET'],
+            'status': 200,
+            'data': '{"pets": "cat dog pig", "else": "bird2"}'
+        }
+        
+        lp = LambdaPager(configfile='data/text.conf')
+        lp.run()
+
+        self.mock_requests.assert_called_once_with(
+            'GET',
+            'https://www.text.com/'
+        )
+        self.assertFalse(self.mock_client.messages.create.called)
+
+    def test_pager_text_config_missing_string(self):
+        """
+        Test that the 'text' test scenario checks the configured sites
+        and pages when all sites succeed but don't return the required
+        text string "bird2"
+        """
+        self.mock_requests.urls['https://www.text.com/'] = {
+            'methods': ['GET'],
+            'status': 200,
+            'data': '{"pets": "cat dog pig", "else": "bird7"}'
+        }
+        
+        lp = LambdaPager(configfile='data/text.conf')
+        lp.run()
+
+        self.mock_requests.assert_called_once_with(
+            'GET',
+            'https://www.text.com/'
+        )
+        self.mock_client.messages.create.assert_called_once_with(
+            body=mock.ANY,
+            to='+12025550001',
+            from_='+12025559999'
+        )
+
+    def test_pager_text_config_missing_string_quoted(self):
+        """
+        Test that the 'text' test scenario checks the configured sites
+        and pages when all sites succeed but don't return the required
+        text string in quotes "cat dog" although both "cat" and "dog"
+        are in the response.
+        """
+        self.mock_requests.urls['https://www.text.com/'] = {
+            'methods': ['GET'],
+            'status': 200,
+            'data': '{"pets": "dog pig cat", "else": "bird2"}'
+        }
+        
+        lp = LambdaPager(configfile='data/text.conf')
+        lp.run()
+
+        self.mock_requests.assert_called_once_with(
+            'GET',
+            'https://www.text.com/'
+        )
+        self.mock_client.messages.create.assert_called_once_with(
+            body=mock.ANY,
+            to='+12025550001',
             from_='+12025559999'
         )
