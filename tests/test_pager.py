@@ -86,57 +86,57 @@ class PagerTests(unittest.TestCase):
         self.session_patcher.stop()
         self.twilio_patcher.stop()
 
-    def test_pager_troutconfig_success(self):
+    def test_pager_basicconfig_success(self):
         """
-        Test that the 'trout' test scenario checks the configured sites
+        Test that the 'basic' test scenario checks the configured sites
         and does not page when all sites succeed.
         """
-        self.mock_requests.urls['https://www.trout.com/'] = {
+        self.mock_requests.urls['https://www.basic.com/'] = {
             'methods': ['GET'],
             'status': 200,
             'data': '{"ok": true}'
         }
-        self.mock_requests.urls['https://www.trout.com/fish/'] = {
+        self.mock_requests.urls['https://www.basic.com/fish/'] = {
             'methods': ['PUT'],
             'status': 201,
             'data': '{"ok": "created"}'
         }
         
-        lp = LambdaPager(configfile='data/trout.conf')
+        lp = LambdaPager(configfile='data/basic.conf')
         lp.run()
         print(self.mock_requests.mock_calls)
         self.mock_requests.assert_any_call(
             'GET',
-            'https://www.trout.com/'
+            'https://www.basic.com/'
         )
         self.mock_requests.assert_any_call(
             'PUT',
-            'https://www.trout.com/fish/'
+            'https://www.basic.com/fish/'
         )
         self.assertFalse(self.mock_client.messages.create.called)
 
-    def test_pager_troutconfig_connection_failure(self):
+    def test_pager_basicconfig_connection_failure(self):
         """
-        Test that the 'trout' test scenario checks the configured sites
+        Test that the 'basic' test scenario checks the configured sites
         and pages all numbers once when a single test fails
         due to a connection error
         """
-        self.mock_requests.urls['https://www.trout.com/'] = {
+        self.mock_requests.urls['https://www.basic.com/'] = {
             'methods': ['GET'],
             'status': 200,
             'data': '{"ok": true}'
         }
         
-        lp = LambdaPager(configfile='data/trout.conf')
+        lp = LambdaPager(configfile='data/basic.conf')
         lp.run()
         print(self.mock_requests.mock_calls)
         self.mock_requests.assert_any_call(
             'GET',
-            'https://www.trout.com/'
+            'https://www.basic.com/'
         )
         self.mock_requests.assert_any_call(
             'PUT',
-            'https://www.trout.com/fish/'
+            'https://www.basic.com/fish/'
         )
         self.mock_client.messages.create.assert_any_call(
             body=mock.ANY,
