@@ -57,3 +57,56 @@ Lambdapager is stateless. Your shift is permanent and immutable.
 
 Look Dave, I can see you're really upset about this. I honestly think
 you ought to sit down calmly, take a stress pill, and think things over.
+
+# Installation, Configuration, and Usage
+
+To install lambdapager clone this repository and use:
+
+```
+python setup.py sdist
+pip install --no-index --find-links=dist/ LambdaPager
+```
+
+(Sorry, I'll put it on pip once it is a bit more mature)
+
+This creates the `lambdapager` command which when invoked will look
+for a file `lambdapager.conf` in the current working directory, check your
+sites as configured, and page you if they are broken.
+
+Here is an example configuration file:
+
+```
+[pager]
+onduty = +12025550195, +12025550135
+
+[twilio]
+sid = 123ABC
+token = 456DEF
+number = +12025550113
+
+[site-example]
+url = https://www.my-website.com/
+method = GET
+status_codes = 200,202
+response_contains = Hello, World
+
+[site-example]
+url = https://www.my-website.com/api/
+method = POST
+status_codes = 201
+```
+
+With this configuration, lambdapager will first test the endpoint
+`https://www.my-website.com/` with a GET and expect a 200 or 202 response.
+If the site is unavailable or a different status code is returned it will
+send SMS messages to the two configured numbers in the "pager" section
+from the account defined in the "twilio" section. Additionally,
+the function will check that the strings "Hello" and "World" are contained
+in the response body.
+
+It will then check the second configured site `https://www.my-website.com/api/`
+with a POST and expect a 201 response, or it will page.
+
+# Deployment
+
+Coming soon...
