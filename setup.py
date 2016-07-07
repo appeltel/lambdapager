@@ -12,6 +12,7 @@ setup(
     packages=['lambdapager'],
     entry_points={'console_scripts': [
         'lambdapager = lambdapager.__main__:main',
+        'lambdapager_bluemix_create = lambdapager.bluemix:create_bluemix_handler',
         'lambdapager_aws_create = lambdapager.aws:create_aws_handler'
     ]},
     install_requires = ['requests>=2.10.0', 'twilio>=5.4.0']
